@@ -8,6 +8,9 @@ import model.Customer;
 public class CustomerService {
 	private static Collection<Customer> customers = new ArrayList<Customer>();
 	
+	public static Collection<Customer> getAllCustomers() {
+		return customers;
+	}
 	/**
 	 * add customer to list 
 	 * @param email
@@ -18,6 +21,8 @@ public class CustomerService {
 		Customer customer = new Customer(firstName, lastName, email);
 		customers.add(customer);
 	}
+	
+	
 	/**
 	 * get Customer by email
 	 * @param customerEmail

@@ -17,6 +17,9 @@ public class ReservationService {
 		rooms.add(room);
 	}
 
+	public static Collection<IRoom> getAllRooms() {
+		return rooms;
+	}
 	public static IRoom getARoom(String roomId) {
 		return rooms.stream().filter(c -> c.getRoomNumber().equals(roomId)).findFirst().get();
 	}
