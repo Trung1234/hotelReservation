@@ -3,10 +3,9 @@ package menu;
 import java.util.Scanner;
 
 import api.AdminResource;
-import api.HotelResource;
 
-public class AdminMenu {
-	public static void createAdminMenu() {
+public class MainMenu {
+	public static void createNainNenu() {
 		Scanner scanner = new Scanner(System.in);
         int choice = 0;
         do {

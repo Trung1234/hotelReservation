@@ -4,6 +4,14 @@ public class Room implements IRoom {
 	protected String roomNumber;
 	protected Double price;
 	protected RoomType enumeration;
+	
+
+	public Room(String roomNumber, Double price, RoomType enumeration) {
+		super();
+		this.roomNumber = roomNumber;
+		this.price = price;
+		this.enumeration = enumeration;
+	}
 
 	@Override
 	public String getRoomNumber() {
