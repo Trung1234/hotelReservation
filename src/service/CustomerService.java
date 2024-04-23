@@ -29,8 +29,12 @@ public class CustomerService {
 	 * @return
 	 */
 	public static Customer getCustomer(String customerEmail) {
-		return customers.stream()
-	            .filter(c -> c.getEmail().equals(customerEmail))
-	            .findFirst().get();
+		Customer result = null;
+		for(Customer customer : customers) {
+			if(customerEmail.equals(customer.getEmail())) {
+				result = customer;
+			}
+		}
+		return result;
 	}
 }

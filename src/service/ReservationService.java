@@ -3,6 +3,7 @@ package service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import model.Customer;
@@ -21,7 +22,9 @@ public class ReservationService {
 		return rooms;
 	}
 	public static IRoom getARoom(String roomId) {
-		return rooms.stream().filter(c -> c.getRoomNumber().equals(roomId)).findFirst().get();
+		Optional<IRoom> foundRoom =  rooms.stream().filter(c ->
+		c.getRoomNumber().equals(roomId)).findFirst();
+		return foundRoom.orElse(null);
 	}
 
 	public static Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {

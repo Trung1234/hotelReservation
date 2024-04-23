@@ -21,20 +21,20 @@ public class HotelResource {
 		return CustomerService.getCustomer(email);
 	}
 
-	public void createACustomer(String email, String firstName, String lastName) {
+	public static void createACustomer(String email, String firstName, String lastName) {
 		CustomerService.addCustomer(email, firstName, lastName);
 	}
 
-	public IRoom getRoom(String roomNumber) {
+	public static IRoom getRoom(String roomNumber) {
 		return ReservationService.getARoom(roomNumber);
 	}
 
-	public Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date CheckOutDate) {
+	public static Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date CheckOutDate) {
 		return ReservationService.reserveARoom(getCustomer(customerEmail), 
 				room, checkInDate, CheckOutDate);
 	}
 	
-	public Collection<Reservation>  getCustomersReservations(String customerEmail) {
+	public static Collection<Reservation>  getCustomersReservations(String customerEmail) {
 		return ReservationService.getCustomersReservation(getCustomer(customerEmail));
 	}
 }
