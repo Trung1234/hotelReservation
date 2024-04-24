@@ -19,31 +19,38 @@ public class MainMenu {
             System.out.println("4. Admin");
             System.out.println("5. Exit");
             System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
-            switch (choice) {
-            case 1:
-                AdminResource.displayAllReservations();
-                break;
-            case 2:
-                seeMyReservations();
-                break;
-            case 3:
-                createAnAccount();                
-                break;
-            case 4:
-            	AdminMenu.createAdminMenu();                
-                break;
-            case 5:
-                break;
-            default:
-                System.out.println("Invalid choice. Please try again.");
-        }
+            // Check if there's an integer available
+            if (scanner.hasNextInt())  {
+            	 choice = scanner.nextInt();
+                 switch (choice) {
+                 case 1:
+                     AdminResource.displayAllReservations();
+                     break;
+                 case 2:
+                     seeMyReservations();
+                     break;
+                 case 3:
+                     createAnAccount();                
+                     break;
+                 case 4:
+                 	AdminMenu.createAdminMenu();                
+                     break;
+                 case 5:
+                     break;
+                 default:
+                     System.out.println("Invalid choice. Please try again.");
+                 }
+            }
+            else {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.next(); // Consume the invalid input
+            }                
         }
         while (choice != 5);
         scanner.close();
 	}
 
-	public static void seeMyReservations() {
+	private static void seeMyReservations() {
 		Scanner input = new Scanner(System.in);
 	    System.out.print("Please input your email: ");
 	    String customerEmail = input.nextLine();
@@ -54,7 +61,7 @@ public class MainMenu {
 	    input.close();
 	}
 
-	public static void createAnAccount() {
+	private static void createAnAccount() {
 		Scanner input = new Scanner(System.in);
 	    System.out.println("Please input your email: ");
 	    String email = input.nextLine();
@@ -64,5 +71,6 @@ public class MainMenu {
 	    String lastName = input.nextLine();
 		HotelResource.createACustomer(email,firstName,lastName);
 		input.close();
+		createNainNenu();
 	}
 }

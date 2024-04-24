@@ -14,40 +14,48 @@ import model.RoomType;
 public class AdminMenu {
 	public static void createAdminMenu() {
 		Scanner scanner = new Scanner(System.in);
-        int choice = 0;
+		String selectedMenu = "";
         do {
-        	System.out.println("Admin Menu:");
-            System.out.println("1. See all Customers");
-            System.out.println("2.  See all Rooms");
-            System.out.println("3.  See all Reservations");
-            System.out.println("4.  Add a Room");
-            System.out.println("5.  Back to Main Menus");
-            System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
-            switch (choice) {
-            case 1:
-            	seeAllCustomers();
-                break;
-            case 2:
-            	seeAllRooms();
-                break;
-            case 3:
-            	AdminResource.displayAllReservations();            
-                break;
-            case 4:
-            	addARoom();               
-                break;
-            case 5:
-            	MainMenu.createNainNenu();
-                break;
-            default:
-                System.out.println("Invalid choice. Please try again.");
+        	
+        	selectedMenu = scanner.nextLine();
+        	 if (selectedMenu.length() == 1) {
+        		 switch (selectedMenu.charAt(0)) {
+                 case '1':
+                 	seeAllCustomers();
+                     break;
+                 case '2':
+                 	seeAllRooms();
+                     break;
+                 case '3':
+                 	AdminResource.displayAllReservations();            
+                     break;
+                 case '4':
+                 	addARoom();               
+                     break;
+                 case '5':
+                 	MainMenu.createNainNenu();
+                     break;
+                 default:
+                     System.out.println("Invalid choice. Please try again.");
+                 }
+        	 }
+            
+            
+        
         }
-        }
-        while (choice != 5);
+        while (selectedMenu.charAt(0) != '5' || selectedMenu.length() != 1);
         scanner.close();
 	}
 
+	private void  displayMainMenu() {
+		System.out.println("Admin Menu:");
+        System.out.println("1. See all Customers");
+        System.out.println("2.  See all Rooms");
+        System.out.println("3.  See all Reservations");
+        System.out.println("4.  Add a Room");
+        System.out.println("5.  Back to Main Menus");
+        System.out.print("Enter your choice: ");
+	}
 	public static void addARoom() {
 		Scanner scanner = new Scanner(System.in);
         int choice;
@@ -63,7 +71,7 @@ public class AdminMenu {
                 }
             } else {
                 System.out.println("Invalid input. Please enter an integer.");
-                scanner.next(); // Consume invalid input
+                scanner.next(); 
             }
         }
         RoomType roomType = RoomType.getValueByLabel(choice);
