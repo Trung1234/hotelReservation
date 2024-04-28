@@ -15,6 +15,7 @@ public class AdminMenu {
 	public static void createAdminMenu() {
 		Scanner scanner = new Scanner(System.in);
 		String selectedMenu = "";
+		displayAdminMenu();
         do {
         	
         	selectedMenu = scanner.nextLine();
@@ -47,7 +48,7 @@ public class AdminMenu {
         scanner.close();
 	}
 
-	private void  displayMainMenu() {
+	private static void  displayAdminMenu() {
 		System.out.println("Admin Menu:");
         System.out.println("1. See all Customers");
         System.out.println("2.  See all Rooms");
