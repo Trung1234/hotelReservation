@@ -21,6 +21,14 @@ public class HotelResource {
 		return CustomerService.getCustomer(email);
 	}
 
+	public static Date addDefaultPlusDays(final Date date) {
+		return ReservationService.addDefaultPlusDays(date);
+	}
+
+	public static Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
+		return ReservationService.findRooms(checkInDate, checkOutDate);
+	}
+
 	public static void createACustomer(String email, String firstName, String lastName) {
 		CustomerService.addCustomer(email, firstName, lastName);
 	}
@@ -30,11 +38,10 @@ public class HotelResource {
 	}
 
 	public static Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date CheckOutDate) {
-		return ReservationService.reserveARoom(getCustomer(customerEmail), 
-				room, checkInDate, CheckOutDate);
+		return ReservationService.reserveARoom(getCustomer(customerEmail), room, checkInDate, CheckOutDate);
 	}
-	
-	public static Collection<Reservation>  getCustomersReservations(String customerEmail) {
+
+	public static Collection<Reservation> getCustomersReservations(String customerEmail) {
 		return ReservationService.getCustomersReservation(getCustomer(customerEmail));
 	}
 }

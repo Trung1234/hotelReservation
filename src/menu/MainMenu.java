@@ -1,11 +1,17 @@
 package menu;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Scanner;
 
 import api.AdminResource;
 import api.HotelResource;
+import common.Constant;
+import model.IRoom;
 import model.Reservation;
 
 public class MainMenu {
@@ -13,16 +19,15 @@ public class MainMenu {
 		Scanner scanner = new Scanner(System.in);
 		String selectedMenu = "";
 		do {
-			//scanner = new Scanner(System.in);
 			try {
 				displayMainMenu();
-				if(scanner.hasNextLine()) {
+				if (scanner.hasNextLine()) {
 					selectedMenu = scanner.nextLine();
 					if (selectedMenu.length() == 1) {
 
 						switch (selectedMenu.charAt(0)) {
 						case '1':
-							AdminResource.displayAllReservations();
+							findAndReserveRoom(scanner);
 							break;
 						case '2':
 							seeMyReservations(scanner);
@@ -31,7 +36,7 @@ public class MainMenu {
 							createAnAccount(scanner);
 							break;
 						case '4':
-							AdminMenu.createAdminMenu();
+							AdminMenu.createAdminMenu(scanner);
 							break;
 						case '5':
 							System.out.println("Exiting the app.");
@@ -42,13 +47,53 @@ public class MainMenu {
 						}
 					}
 				}
-				
+
 			} catch (NoSuchElementException e) {
 				System.err.println("No input provided.");
 			}
 
 		} while (selectedMenu.charAt(0) != '5' || selectedMenu.length() != 1);
-		
+
+	}
+
+	private static void findAndReserveRoom(Scanner scanner) {
+		System.out.println("Please input checkIn Date with format mm/dd/yyyy ");
+		Date checkIn = getDateFormat(scanner);
+		System.out.println("Please input Check-Out Date with format mm/dd/yyyy ");
+		Date checkOut = getDateFormat(scanner);
+		if (Objects.nonNull(checkIn) && Objects.nonNull(checkOut)) {
+			Collection<IRoom> availableRooms = HotelResource.findRooms(checkIn, checkOut);
+
+			if (availableRooms.isEmpty()) {
+				System.out.println("No rooms available");
+			} else {
+				final Date alternativeCheckIn = HotelResource.addDefaultPlusDays(checkIn);
+				final Date alternativeCheckOut = HotelResource.addDefaultPlusDays(checkOut);
+				System.out.println("We've only found rooms on alternative dates:" + "\nCheck-In Date:"
+						+ alternativeCheckIn + "\nCheck-Out Date:" + alternativeCheckOut);
+
+				printRooms(availableRooms);
+			}
+		}
+	}
+
+	private static void printRooms(final Collection<IRoom> rooms) {
+		if (rooms.isEmpty()) {
+			System.out.println("No rooms found.");
+		} else {
+			rooms.forEach(System.out::println);
+		}
+	}
+
+	private static Date getDateFormat(Scanner scanner) {
+		try {
+			return new SimpleDateFormat(Constant.DATE_FORMAT).parse(scanner.nextLine());
+		} catch (ParseException ex) {
+			System.out.println("Invalid date format!");
+			findAndReserveRoom(scanner);
+		}
+
+		return null;
 	}
 
 	private static void displayMainMenu() {
@@ -84,8 +129,6 @@ public class MainMenu {
 			System.out.println(ex.getLocalizedMessage());
 			createAnAccount(scanner);
 		}
-
-
 
 		// createNainNenu();
 	}

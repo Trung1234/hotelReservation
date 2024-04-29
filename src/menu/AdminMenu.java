@@ -1,51 +1,53 @@
 package menu;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import api.AdminResource;
-import api.HotelResource;
 import model.Customer;
 import model.IRoom;
-import model.Reservation;
 import model.Room;
 import model.RoomType;
 
 public class AdminMenu {
-	public static void createAdminMenu() {
-		Scanner scanner = new Scanner(System.in);
+	public static void createAdminMenu(Scanner scanner) {
+
 		String selectedMenu = "";
-		displayAdminMenu();
-        do {
-        	
-        	selectedMenu = scanner.nextLine();
-        	 if (selectedMenu.length() == 1) {
-        		 switch (selectedMenu.charAt(0)) {
-                 case '1':
-                 	seeAllCustomers();
-                     break;
-                 case '2':
-                 	seeAllRooms();
-                     break;
-                 case '3':
-                 	AdminResource.displayAllReservations();            
-                     break;
-                 case '4':
-                 	addARoom();               
-                     break;
-                 case '5':
-                 	MainMenu.createNainNenu();
-                     break;
-                 default:
-                     System.out.println("Invalid choice. Please try again.");
-                 }
-        	 }
-            
-            
+		try {
+			do {
+	        	displayAdminMenu();
+	        	if (scanner.hasNextLine())  {
+	        		selectedMenu = scanner.nextLine();
+	           	 if (selectedMenu.length() == 1) {
+	           		 switch (selectedMenu.charAt(0)) {
+	                    case '1':
+	                    	seeAllCustomers();
+	                        break;
+	                    case '2':
+	                    	seeAllRooms();
+	                        break;
+	                    case '3':
+	                    	AdminResource.displayAllReservations();            
+	                        break;
+	                    case '4':
+	                    	addARoom(scanner);               
+	                        break;
+	                    case '5':
+	                    	MainMenu.createNainNenu();
+	                        break;
+	                    default:
+	                        System.out.println("Invalid choice. Please try again.");
+	                    }
+	           	 }
+	        	}      
+	        }
+	        while (selectedMenu.charAt(0) != '5' || selectedMenu.length() != 1);
+		}catch (Exception e) {
+			System.err.println(e);
+			createAdminMenu(scanner);
+		}
         
-        }
-        while (selectedMenu.charAt(0) != '5' || selectedMenu.length() != 1);
-        scanner.close();
 	}
 
 	private static void  displayAdminMenu() {
@@ -57,10 +59,17 @@ public class AdminMenu {
         System.out.println("5.  Back to Main Menus");
         System.out.print("Enter your choice: ");
 	}
-	public static void addARoom() {
-		Scanner scanner = new Scanner(System.in);
+	
+	public static void addARoom(Scanner scanner) {
+		
         int choice;
-        System.out.println("Enter 1 or 2 to make a choice of Room type.");
+        
+        System.out.println("Please input your roomNumber: ");
+	    String roomNumber = scanner.nextLine();
+	    System.out.println("Please input your roomNumber's price: ");
+	    Double price = addRoomPrice(scanner);
+        
+	    System.out.println("Enter 1 or 2 to make a choice of Room type.");
         while (true) {
             System.out.print("Enter your choice (1 or 2): 1 is SINGLE, 2 is DOUBLE");
             if (scanner.hasNextInt()) { // Check if input is an integer
@@ -76,14 +85,19 @@ public class AdminMenu {
             }
         }
         RoomType roomType = RoomType.getValueByLabel(choice);
-        System.out.println("Please input your roomNumber: ");
-	    String roomNumber = scanner.nextLine();
-	    System.out.println("Please input your roomNumber's price: ");
-	    Double price = scanner.nextDouble();
-        scanner.close();
+	    
         IRoom room = new Room(roomNumber,  price, roomType);
 		AdminResource.addRoom(room);
 	}
+	
+	 private static double addRoomPrice(Scanner scanner) {
+	        try {
+	            return Double.parseDouble(scanner.nextLine());
+	        } catch (NumberFormatException e) {
+	            System.out.println("Invalid price format! Please, enter a valid double number.");
+	            return addRoomPrice(scanner);
+	        }
+	    }
 
 	public static void seeAllCustomers() {
 		Collection<Customer> customers = AdminResource.getAllCustomers();
