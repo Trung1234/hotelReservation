@@ -1,6 +1,7 @@
 package menu;
 
 import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import api.AdminResource;
@@ -12,34 +13,42 @@ public class MainMenu {
 		Scanner scanner = new Scanner(System.in);
 		String selectedMenu = "";
 		do {
-			displayMainMenu();
+			//scanner = new Scanner(System.in);
+			try {
+				displayMainMenu();
+				if(scanner.hasNextLine()) {
+					selectedMenu = scanner.nextLine();
+					if (selectedMenu.length() == 1) {
 
-			// Check if there's an integer available
-			selectedMenu = scanner.nextLine();
-			if (selectedMenu.length() == 1) {
-
-				switch (selectedMenu.charAt(0)) {
-				case '1':
-					AdminResource.displayAllReservations();
-					break;
-				case '2':
-					seeMyReservations();
-					break;
-				case '3':
-					createAnAccount();
-					break;
-				case '4':
-					AdminMenu.createAdminMenu();
-					break;
-				case '5':
-					break;
-				default:
-					System.out.println("Invalid choice. Please try again.");
+						switch (selectedMenu.charAt(0)) {
+						case '1':
+							AdminResource.displayAllReservations();
+							break;
+						case '2':
+							seeMyReservations(scanner);
+							break;
+						case '3':
+							createAnAccount(scanner);
+							break;
+						case '4':
+							AdminMenu.createAdminMenu();
+							break;
+						case '5':
+							System.out.println("Exiting the app.");
+							scanner.close();
+							break;
+						default:
+							System.out.println("Invalid choice. Please try again.");
+						}
+					}
 				}
+				
+			} catch (NoSuchElementException e) {
+				System.err.println("No input provided.");
 			}
 
 		} while (selectedMenu.charAt(0) != '5' || selectedMenu.length() != 1);
-		scanner.close();
+		
 	}
 
 	private static void displayMainMenu() {
@@ -53,28 +62,31 @@ public class MainMenu {
 
 	}
 
-	private static void seeMyReservations() {
-		Scanner input = new Scanner(System.in);
+	private static void seeMyReservations(Scanner scanner) {
 		System.out.print("Please input your email: ");
-		String customerEmail = input.nextLine();
+		String customerEmail = scanner.nextLine();
 		Collection<Reservation> reservations = HotelResource.getCustomersReservations(customerEmail);
 		for (Reservation reservation : reservations) {
 			System.out.println(reservation);
 		}
-		input.close();
 	}
 
-	private static void createAnAccount() {
-		Scanner input = new Scanner(System.in);
+	private static void createAnAccount(Scanner scanner) {
 		System.out.println("Please input your email: ");
-		String email = input.nextLine();
+		String email = scanner.nextLine();
 		System.out.println("Please input your first name: ");
-		String firstName = input.nextLine();
+		String firstName = scanner.nextLine();
 		System.out.println("Please input your last name: ");
-		String lastName = input.nextLine();
-		HotelResource.createACustomer(email, firstName, lastName);
-		input.close();
-		displayMainMenu();
-		//createNainNenu();
+		String lastName = scanner.nextLine();
+		try {
+			HotelResource.createACustomer(email, firstName, lastName);
+		} catch (IllegalArgumentException ex) {
+			System.out.println(ex.getLocalizedMessage());
+			createAnAccount(scanner);
+		}
+
+
+
+		// createNainNenu();
 	}
 }
