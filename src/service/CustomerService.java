@@ -5,7 +5,11 @@ import java.util.Collection;
 
 import model.Customer;
 
-public class CustomerService {
+/**
+ * @author Trung
+ */
+public final class CustomerService {
+	private static CustomerService instance;
 	private static Collection<Customer> customers = new ArrayList<Customer>();
 	
 	public static Collection<Customer> getAllCustomers() {

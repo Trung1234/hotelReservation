@@ -48,8 +48,8 @@ public class ReservationService {
 
 	public static Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
 		return reservations.stream()
-				.filter(reservation -> !checkInDate.before(reservation.getCheckInDate())
-						&& !checkOutDate.after(reservation.getCheckOutDate()))
+				.filter(reservation -> checkInDate.equals(reservation.getCheckInDate())
+						&& !checkOutDate.equals(reservation.getCheckOutDate()))
 				.map(Reservation::getRoom).collect(Collectors.toList());
 	}
 

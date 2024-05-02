@@ -44,7 +44,6 @@ public class AdminMenu {
 	        }
 	        while (selectedMenu.charAt(0) != '5' || selectedMenu.length() != 1);
 		}catch (Exception e) {
-			System.err.println(e);
 			createAdminMenu(scanner);
 		}
         

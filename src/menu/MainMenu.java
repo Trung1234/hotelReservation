@@ -67,10 +67,10 @@ public class MainMenu {
 			if (availableRooms.isEmpty()) {
 				System.out.println("No rooms available");
 			} else {
-				final Date alternativeCheckIn = HotelResource.addDefaultPlusDays(checkIn);
-				final Date alternativeCheckOut = HotelResource.addDefaultPlusDays(checkOut);
-				System.out.println("We've only found rooms on alternative dates:" + "\nCheck-In Date:"
-						+ alternativeCheckIn + "\nCheck-Out Date:" + alternativeCheckOut);
+//				final Date alternativeCheckIn = HotelResource.addDefaultPlusDays(checkIn);
+//				final Date alternativeCheckOut = HotelResource.addDefaultPlusDays(checkOut);
+//				System.out.println("We've only found rooms on alternative dates:" + "\nCheck-In Date:"
+//						+ alternativeCheckIn + "\nCheck-Out Date:" + alternativeCheckOut);
 
 				printRooms(availableRooms);
 			}
