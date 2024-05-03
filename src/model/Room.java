@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 public class Room implements IRoom {
 	protected String roomNumber;
 	protected Double price;
@@ -12,6 +14,27 @@ public class Room implements IRoom {
 		this.price = price;
 		this.enumeration = enumeration;
 	}
+
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(enumeration, price, roomNumber);
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Room other = (Room) obj;
+		return enumeration == other.enumeration && Objects.equals(price, other.price)
+				&& Objects.equals(roomNumber, other.roomNumber);
+	}
+
 
 	@Override
 	public String getRoomNumber() {

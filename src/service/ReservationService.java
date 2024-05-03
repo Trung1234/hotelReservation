@@ -34,7 +34,7 @@ public final class ReservationService {
 	
 	public  void addRoom(IRoom room) {
 		if(rooms.contains(room)) {
-			throw new IllegalArgumentException("This room number is existed.");
+			System.out.println("This room number is existed");
 		}
 		rooms.add(room);
 	}
