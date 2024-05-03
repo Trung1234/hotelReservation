@@ -1,7 +1,7 @@
 package service;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Objects;
 
 import model.Customer;
 
@@ -10,20 +10,36 @@ import model.Customer;
  */
 public final class CustomerService {
 	private static CustomerService instance;
-	private static Collection<Customer> customers = new ArrayList<Customer>();
+
+	private static HashMap<String, Customer> mapCustomers;
 	
-	public static Collection<Customer> getAllCustomers() {
-		return customers;
+	private CustomerService() {
+		mapCustomers = new HashMap<>();
 	}
+	
+	public static CustomerService getInstance() {
+		if (Objects.isNull(instance)) {
+			instance = new CustomerService(); 
+		}
+		return instance;
+	}
+	
+	public   HashMap<String, Customer>  getAllCustomers() {
+		return mapCustomers;
+	}
+	
 	/**
 	 * add customer to list 
 	 * @param email
 	 * @param firstName
 	 * @param lastName
 	 */
-	public static  void addCustomer(String email, String firstName, String lastName) {
+	public   void addCustomer(String email, String firstName, String lastName) {
+		if(mapCustomers.containsKey(email)) {
+			 throw new IllegalArgumentException("This email has existed in this program");
+		}
 		Customer customer = new Customer(firstName, lastName, email);
-		customers.add(customer);
+		mapCustomers.put(email, customer);
 	}
 	
 	
@@ -32,9 +48,9 @@ public final class CustomerService {
 	 * @param customerEmail
 	 * @return
 	 */
-	public static Customer getCustomer(String customerEmail) {
+	public  Customer getCustomer(String customerEmail) {
 		Customer result = null;
-		for(Customer customer : customers) {
+		for(Customer customer : mapCustomers.values()) {
 			if(customerEmail.equals(customer.getEmail())) {
 				result = customer;
 			}

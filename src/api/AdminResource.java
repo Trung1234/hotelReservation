@@ -8,23 +8,31 @@ import service.CustomerService;
 import service.ReservationService;
 
 public class AdminResource {
-	public static Customer getCustomer(String email) {
-		return CustomerService.getCustomer(email);
+	private final CustomerService customerService;
+	private final ReservationService reservationService;
+
+	public AdminResource(CustomerService customerService, ReservationService reservationService) {
+		this.customerService = customerService;
+		this.reservationService = reservationService;
 	}
 	
-	public static void addRoom(IRoom room) {
-		ReservationService.addRoom(room);
+	public  Customer getCustomer(String email) {
+		return customerService.getCustomer(email);
 	}
 	
-	public static Collection<IRoom> getAllRooms() {
-		return ReservationService.getAllRooms();
+	public  void addRoom(IRoom room) {
+		reservationService.addRoom(room);
 	}
 	
-	public static Collection<Customer> getAllCustomers() {
-		return CustomerService.getAllCustomers();
+	public  Collection<IRoom> getAllRooms() {
+		return reservationService.getAllRooms();
 	}
 	
-	public static void displayAllReservations() {
-		ReservationService.printAllReservation();
+	public  Collection<Customer> getAllCustomers() {
+		return customerService.getAllCustomers().values();
+	}
+	
+	public  void displayAllReservations() {
+		reservationService.printAllReservation();
 	}
 }

@@ -5,16 +5,32 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import api.AdminResource;
+import api.HotelResource;
+import main.inteface.IMenu;
 import model.Customer;
 import model.IRoom;
 import model.Room;
 import model.RoomType;
 
-public class AdminMenu {
-	public static void createAdminMenu(Scanner scanner) {
+public class AdminMenu implements IMenu {
+
+	
+	private final AdminResource adminResource;
+	
+	private final Scanner scanner;
+
+	public AdminMenu(AdminResource adminResource, Scanner scanner) {
+		super();
+		this.adminResource = adminResource;
+		this.scanner = scanner;
+	}
+	
+	@Override
+	public void createMenu() {
 
 		String selectedMenu = "";
 		try {
+			boolean exitLoop = false;
 			do {
 	        	displayAdminMenu();
 	        	if (scanner.hasNextLine())  {
@@ -28,13 +44,14 @@ public class AdminMenu {
 	                    	seeAllRooms();
 	                        break;
 	                    case '3':
-	                    	AdminResource.displayAllReservations();            
+	                    	adminResource.displayAllReservations();            
 	                        break;
 	                    case '4':
 	                    	addARoom(scanner);               
 	                        break;
 	                    case '5':
-	                    	MainMenu.createNainNenu();
+	                    	System.out.println("Back to the main menu.");
+	                    	exitLoop = true;;
 	                        break;
 	                    default:
 	                        System.out.println("Invalid choice. Please try again.");
@@ -42,14 +59,14 @@ public class AdminMenu {
 	           	 }
 	        	}      
 	        }
-	        while (selectedMenu.charAt(0) != '5' || selectedMenu.length() != 1);
+	        while (!exitLoop && (selectedMenu.charAt(0) != '5' || selectedMenu.length() != 1));
 		}catch (Exception e) {
-			createAdminMenu(scanner);
+			createMenu();
 		}
         
 	}
 
-	private static void  displayAdminMenu() {
+	private  void  displayAdminMenu() {
 		System.out.println("Admin Menu:");
         System.out.println("1. See all Customers");
         System.out.println("2.  See all Rooms");
@@ -59,7 +76,7 @@ public class AdminMenu {
         System.out.print("Enter your choice: ");
 	}
 	
-	public static void addARoom(Scanner scanner) {
+	public  void addARoom(Scanner scanner) {
 		
         int choice;
         
@@ -86,7 +103,7 @@ public class AdminMenu {
         RoomType roomType = RoomType.getValueByLabel(choice);
 	    
         IRoom room = new Room(roomNumber,  price, roomType);
-		AdminResource.addRoom(room);
+        adminResource.addRoom(room);
 	}
 	
 	 private static double addRoomPrice(Scanner scanner) {
@@ -98,15 +115,20 @@ public class AdminMenu {
 	        }
 	    }
 
-	public static void seeAllCustomers() {
-		Collection<Customer> customers = AdminResource.getAllCustomers();
-		for(Customer customer : customers) {
-	    	System.out.println(customer);
-	    }
+	public  void seeAllCustomers() {
+		Collection<Customer> customers;
+		try {
+			customers = adminResource.getAllCustomers();
+			for(Customer customer : customers) {
+		    	System.out.println(customer);
+		    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
 	}
 	
-	public static void seeAllRooms() {
-		Collection<IRoom> rooms = AdminResource.getAllRooms();
+	public  void seeAllRooms() {
+		Collection<IRoom> rooms =  adminResource.getAllRooms();
 		for(IRoom room : rooms) {
 	    	System.out.println(room);
 	    }

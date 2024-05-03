@@ -9,7 +9,15 @@ import model.Reservation;
 import service.CustomerService;
 import service.ReservationService;
 
-public class HotelResource {
+public final class HotelResource {
+
+	private final CustomerService customerService;
+	private final ReservationService reservationService;
+
+	public HotelResource(CustomerService customerService, ReservationService reservationService) {
+		this.customerService = customerService;
+		this.reservationService = reservationService;
+	}
 
 	/**
 	 * get Customer by email
@@ -17,31 +25,31 @@ public class HotelResource {
 	 * @param customerEmail
 	 * @return
 	 */
-	public static Customer getCustomer(String email) {
-		return CustomerService.getCustomer(email);
+	public Customer getCustomer(String email) {
+		return customerService.getCustomer(email);
 	}
 
-	public static Date addDefaultPlusDays(final Date date) {
-		return ReservationService.addDefaultPlusDays(date);
+//	public Date addDefaultPlusDays(final Date date) {
+//		return reservationService.addDefaultPlusDays(date);
+//	}
+
+	public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
+		return reservationService.findRooms(checkInDate, checkOutDate);
 	}
 
-	public static Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
-		return ReservationService.findRooms(checkInDate, checkOutDate);
+	public void createACustomer(String email, String firstName, String lastName) {
+		customerService.addCustomer(email, firstName, lastName);
 	}
 
-	public static void createACustomer(String email, String firstName, String lastName) {
-		CustomerService.addCustomer(email, firstName, lastName);
+	public IRoom getRoom(String roomNumber) {
+		return reservationService.getARoom(roomNumber);
 	}
 
-	public static IRoom getRoom(String roomNumber) {
-		return ReservationService.getARoom(roomNumber);
+	public Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date CheckOutDate) {
+		return reservationService.reserveARoom(getCustomer(customerEmail), room, checkInDate, CheckOutDate);
 	}
 
-	public static Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date CheckOutDate) {
-		return ReservationService.reserveARoom(getCustomer(customerEmail), room, checkInDate, CheckOutDate);
-	}
-
-	public static Collection<Reservation> getCustomersReservations(String customerEmail) {
-		return ReservationService.getCustomersReservation(getCustomer(customerEmail));
+	public Collection<Reservation> getCustomersReservations(String customerEmail) {
+		return reservationService.getCustomersReservation(getCustomer(customerEmail));
 	}
 }
