@@ -77,6 +77,12 @@ public final class MainMenu implements IMenu {
 		Date checkIn = getDateFormat(scanner);
 		System.out.println("Please input Check-Out Date with format mm/dd/yyyy ");
 		Date checkOut = getDateFormat(scanner);
+		// Check Check-Out Date is after checkIn Date
+		while (checkOut.before(checkIn) || checkOut.equals(checkIn)) {
+			System.out.println("Check-Out Date has  to  be after checkIn Date");
+			System.out.println("Please input Check-Out Date with format mm/dd/yyyy ");
+			checkOut = getDateFormat(scanner);
+		}
 		// hotelResource.
 		if (Objects.nonNull(checkIn) && Objects.nonNull(checkOut)) {
 			AdminMenu adMenu = (AdminMenu) adminMenu;
@@ -97,7 +103,7 @@ public final class MainMenu implements IMenu {
 			} else {
 				final Date alternativeCheckIn = hotelResource.addDefaultPlusDays(checkIn);
 				final Date alternativeCheckOut = hotelResource.addDefaultPlusDays(checkOut);
-				System.out.println("We've only found rooms on alternative dates:" + "\nCheck-In Date:"
+				System.out.println("We've only found this room on alternative dates:" + "\nCheck-In Date:"
 						+ alternativeCheckIn + "\nCheck-Out Date:" + alternativeCheckOut);
 				reserveRoom(room, scanner, alternativeCheckIn, alternativeCheckOut);
 			}
