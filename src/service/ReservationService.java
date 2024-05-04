@@ -19,61 +19,61 @@ public final class ReservationService {
 	private static Collection<Reservation> reservations;
 
 	private static ReservationService instance;
-	
+
 	private ReservationService() {
 		rooms = new ArrayList<>();
 		reservations = new ArrayList<>();
 	}
-	
+
 	public static ReservationService getInstance() {
 		if (Objects.isNull(instance)) {
-			instance = new ReservationService(); 
+			instance = new ReservationService();
 		}
 		return instance;
 	}
-	
-	public  void addRoom(IRoom room) {
-		if(rooms.contains(room)) {
+
+	public void addRoom(IRoom room) {
+		if (rooms.contains(room)) {
 			System.out.println("This room  is existed");
 		} else {
 			rooms.add(room);
-		}		
+		}
 	}
-	
-	public  Collection<IRoom> getAllRooms() {
+
+	public Collection<IRoom> getAllRooms() {
 		return rooms;
 	}
 
-	public  IRoom getARoom(String roomId) {
+	public IRoom getARoom(String roomId) {
 		Optional<IRoom> foundRoom = rooms.stream().filter(c -> c.getRoomNumber().equals(roomId)).findFirst();
 		return foundRoom.orElse(null);
 	}
 
-	public  Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
+	public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
 		Reservation reservation = new Reservation(customer, room, checkInDate, checkOutDate);
 		reservations.add(reservation);
 		return reservation;
 	}
 
-	public  void printAllReservation() {
+	public void printAllReservation() {
 		for (Reservation reservation : reservations) {
 			System.out.println(reservation);
 		}
 	}
 
-	public  Collection<Reservation> getCustomersReservation(Customer customer) {
+	public Collection<Reservation> getCustomersReservation(Customer customer) {
 		return reservations.stream().filter(reservation -> customer.equals(reservation.getCustomer()))
 				.collect(Collectors.toList());
 	}
 
-	public  Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
+	public  Reservation findReservation(IRoom  room ,Date checkInDate, Date checkOutDate) {
 		return reservations.stream()
 				.filter(reservation -> checkInDate.equals(reservation.getCheckInDate())
-						&& !checkOutDate.equals(reservation.getCheckOutDate()))
-				.map(Reservation::getRoom).collect(Collectors.toList());
+						&& checkOutDate.equals(reservation.getCheckOutDate())
+						&& room.equals(reservation.getRoom())).findFirst().orElse(null);
 	}
 
-	public  Date  addDefaultPlusDays(final Date date) {
+	public Date addDefaultPlusDays(final Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DATE, Constant.RECOMMENDED_ROOMS_DEFAULT_PLUS_DAYS);

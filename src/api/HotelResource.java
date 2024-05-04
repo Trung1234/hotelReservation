@@ -33,8 +33,8 @@ public final class HotelResource {
 		return reservationService.addDefaultPlusDays(date);
 	}
 
-	public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
-		return reservationService.findRooms(checkInDate, checkOutDate);
+	public Reservation findReservation(IRoom room ,Date checkInDate, Date checkOutDate) {
+		return reservationService.findReservation(room, checkInDate, checkOutDate);
 	}
 
 	public void createACustomer(String email, String firstName, String lastName) {
