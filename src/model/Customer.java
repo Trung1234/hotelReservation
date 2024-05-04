@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import common.EmailValidator;
 
-public class Customer {
+public final  class Customer {
 	
 	private String firstName;
 	private String lastName;

@@ -4,9 +4,9 @@ import java.util.Scanner;
 
 import api.AdminResource;
 import api.HotelResource;
-import main.inteface.IMenu;
 import menu.AdminMenu;
 import menu.MainMenu;
+import menu.interdace.IMenu;
 import service.CustomerService;
 import service.ReservationService;
 

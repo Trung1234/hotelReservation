@@ -11,7 +11,8 @@ import java.util.Scanner;
 import api.AdminResource;
 import api.HotelResource;
 import common.Constant;
-import main.inteface.IMenu;
+import menu.interdace.IMenu;
+import model.Customer;
 import model.IRoom;
 import model.Reservation;
 
@@ -76,20 +77,56 @@ public final class MainMenu implements IMenu {
 		Date checkIn = getDateFormat(scanner);
 		System.out.println("Please input Check-Out Date with format mm/dd/yyyy ");
 		Date checkOut = getDateFormat(scanner);
+		// hotelResource.
 		if (Objects.nonNull(checkIn) && Objects.nonNull(checkOut)) {
 			Collection<IRoom> availableRooms = hotelResource.findRooms(checkIn, checkOut);
 
 			if (availableRooms.isEmpty()) {
-				System.out.println("No rooms available");
+				AdminMenu adMenu = (AdminMenu) adminMenu;
+				adMenu.seeAllRooms();
+				reserveRoom(scanner, checkIn, checkOut);
 			} else {
-//				final Date alternativeCheckIn = HotelResource.addDefaultPlusDays(checkIn);
-//				final Date alternativeCheckOut = HotelResource.addDefaultPlusDays(checkOut);
-//				System.out.println("We've only found rooms on alternative dates:" + "\nCheck-In Date:"
-//						+ alternativeCheckIn + "\nCheck-Out Date:" + alternativeCheckOut);
+				final Date alternativeCheckIn = hotelResource.addDefaultPlusDays(checkIn);
+				final Date alternativeCheckOut = hotelResource.addDefaultPlusDays(checkOut);
+				System.out.println("We've only found rooms on alternative dates:" + "\nCheck-In Date:"
+						+ alternativeCheckIn + "\nCheck-Out Date:" + alternativeCheckOut);
 
 				printRooms(availableRooms);
 			}
 		}
+	}
+
+	private void reserveRoom(Scanner scanner, Date checkIn, Date checkOut) {
+		while (true) {
+			System.out.println("Do you want to book a room ? (y for yes/ no for no)");
+			// Convert input to lowercase for case-insensitive comparison
+			String input = scanner.nextLine().toLowerCase();
+
+			if (input.equals(Constant.OPTION.YES.getOption())) {
+				System.out.println("Please input a room number");
+				String roomNumber = scanner.nextLine();
+				IRoom room = hotelResource.getRoom(roomNumber);
+				if (Objects.isNull(room)) {
+					System.out.println("This room number is not exist...");
+					continue;
+				}
+				System.out.println("Please input a customer's email");
+				String email = scanner.nextLine();
+				Customer customer = hotelResource.getCustomer(email);
+				if (Objects.isNull(customer)) {
+					System.out.println("This email is not exist...");
+					continue;
+				}
+				Reservation reservation = hotelResource.bookARoom(email, room, checkIn, checkOut);
+				System.out.println(reservation);
+			} else if (input.equals(Constant.OPTION.NO.getOption())) {
+				System.out.println("Exiting...");
+				break; // Exit the loop if the user answers 'no'
+			} else {
+				continue;
+			}
+		}
+
 	}
 
 	private void printRooms(final Collection<IRoom> rooms) {

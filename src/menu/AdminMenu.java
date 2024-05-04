@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import api.AdminResource;
 import api.HotelResource;
-import main.inteface.IMenu;
+import menu.interdace.IMenu;
 import model.Customer;
 import model.IRoom;
 import model.Room;
@@ -78,7 +78,7 @@ public class AdminMenu implements IMenu {
 	
 	public  void addARoom(Scanner scanner) {
 		
-        int choice;
+        String choice = "";
         
         System.out.println("Please input your roomNumber: ");
 	    String roomNumber = scanner.nextLine();
@@ -87,10 +87,11 @@ public class AdminMenu implements IMenu {
         
 	    System.out.println("Enter 1 or 2 to make a choice of Room type.");
         while (true) {
-            System.out.print("Enter your choice (1 or 2): 1 is SINGLE, 2 is DOUBLE");
-            if (scanner.hasNextInt()) { // Check if input is an integer
-                choice = scanner.nextInt();
-                if (choice == 1 || choice == 2) { // Check if input is 1 or 2
+            System.out.println("Enter your choice (1 or 2): 1 for SINGLE bed, 2 is DOUBLE bed");
+            if (scanner.hasNextLine()) { // Check if input is an integer
+                choice = scanner.nextLine();
+                if (choice.equals(RoomType.DOUBLE.label.toString()) || choice.equals(RoomType.SINGLE.label.toString())) { 
+                	// Check if input is 1 or 2
                     break;
                 } else {
                     System.out.println("Invalid choice. Please enter 1 or 2.");
@@ -100,7 +101,7 @@ public class AdminMenu implements IMenu {
                 scanner.next(); 
             }
         }
-        RoomType roomType = RoomType.getValueByLabel(choice);
+        RoomType roomType = RoomType.getValueByLabel(Integer.valueOf(choice));
 	    
         IRoom room = new Room(roomNumber,  price, roomType);
         adminResource.addRoom(room);
@@ -128,6 +129,7 @@ public class AdminMenu implements IMenu {
 	}
 	
 	public  void seeAllRooms() {
+		System.out.println("These are all rooms");
 		Collection<IRoom> rooms =  adminResource.getAllRooms();
 		for(IRoom room : rooms) {
 	    	System.out.println(room);

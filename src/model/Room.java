@@ -24,15 +24,12 @@ public class Room implements IRoom {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Room))
 			return false;
 		Room other = (Room) obj;
-		return enumeration == other.enumeration && Objects.equals(price, other.price)
-				&& Objects.equals(roomNumber, other.roomNumber);
+		return Objects.equals(roomNumber, other.roomNumber);
 	}
 
 

@@ -20,6 +20,10 @@ public class AdminResource {
 		return customerService.getCustomer(email);
 	}
 	
+	public IRoom getRoom(String roomNumber) {
+		return reservationService.getARoom(roomNumber);
+	}
+	
 	public  void addRoom(IRoom room) {
 		reservationService.addRoom(room);
 	}

@@ -29,9 +29,9 @@ public final class HotelResource {
 		return customerService.getCustomer(email);
 	}
 
-//	public Date addDefaultPlusDays(final Date date) {
-//		return reservationService.addDefaultPlusDays(date);
-//	}
+	public Date addDefaultPlusDays(final Date date) {
+		return reservationService.addDefaultPlusDays(date);
+	}
 
 	public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
 		return reservationService.findRooms(checkInDate, checkOutDate);
